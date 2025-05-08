@@ -14,7 +14,6 @@ exports.getLiveStream = async (req, res, next) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
     const link = response.data?.js?.cmd;
     if (response.data === "Authorization failed.")
       throw new Error("Authorization failed.");
