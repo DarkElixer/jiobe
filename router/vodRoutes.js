@@ -10,4 +10,5 @@ router
     vodController.getCategoriesItem,
     vodController.getCategoriesItemSeasonsAndEpisodeLink
   );
+router.route("/search").post(vodController.getVodBySearch);
 module.exports = router;
