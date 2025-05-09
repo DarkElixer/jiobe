@@ -98,9 +98,23 @@ exports.getVodStreamLink = async (req, res, next) => {
   } catch (err) {
     res.status(401).json({ status: "fail", message: err.message });
   }
-  // const { seriesNumber } = req.query;
-  // const streamUrl = `http://${portal}/stalker_portal/server/load.php?type=vod&action=create_link&cmd=/media/file_${id}.mpg&series=${seriesNumber}&JsHttpRequest=1-xml`;
-  // const response = await axios(streamUrl, { headers: headers2 });
-  // const cmd = response.data.js.cmd;
-  // res.status(200).redirect(cmd);
+};
+
+exports.getVodBySearch = async (req, res, next) => {
+  const { token } = req.body;
+  const { q, page } = req.query;
+  try {
+    const request = `http://${portal}/stalker_portal/server/load.php?type=vod&action=get_ordered_list&search=${q}&genre=*&p=${page}&sortby=added&JsHttpRequest=1-xml`;
+    const response = await axios(request, {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.data === "Authorization failed.")
+      throw new Error("Authorization failed.");
+    res.status(200).json({ status: "success", data: response.data.js });
+  } catch (err) {
+    res.status(401).json({ status: "fail", message: err.message });
+  }
 };
